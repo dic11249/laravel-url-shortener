@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UrlController;
+use App\Http\Resources\UrlResource;
+use App\Models\Url;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,10 +17,12 @@ Route::get('/', function () {
     ]);
 });
 
+/** dashboard */
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+/** profile */
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -26,6 +30,10 @@ Route::middleware('auth')->group(function () {
 });
 
 
+/** url */
+Route::get('/urls', [UrlController::class, 'index'])->name('urls.index');
+Route::get('/urls/create', [UrlController::class, 'create'])->name('urls.create');
 Route::post('/urls/store', [UrlController::class, 'store'])->name('urls.store');
+
 
 require __DIR__.'/auth.php';

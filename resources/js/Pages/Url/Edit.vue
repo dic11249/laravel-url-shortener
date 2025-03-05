@@ -1,18 +1,21 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
-import CreateUrlForm from './Url/Partials/CreateUrlForm.vue';
+import UrlList from '@/Pages/Url/Partials/UrlList.vue';
+import { Head, usePage } from '@inertiajs/vue3';
+
+const { props } = usePage();
+
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Url" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2
-                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Dashboard
+                Url
             </h2>
         </template>
 
@@ -21,7 +24,7 @@ import CreateUrlForm from './Url/Partials/CreateUrlForm.vue';
                 <div
                     class="bg-white p-4 shadow sm:rounded-lg sm:p-8"
                 >
-                    <CreateUrlForm />
+                    <UrlList :urls="props.urls" />
                 </div>
             </div>
         </div>
