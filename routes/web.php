@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UrlController;
-use App\Http\Resources\UrlResource;
 use App\Models\Url;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Resources\UrlResource;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\UrlController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RedirectController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -37,3 +38,7 @@ Route::post('/urls/store', [UrlController::class, 'store'])->name('urls.store');
 
 
 require __DIR__.'/auth.php';
+
+Route::get('/r/{code}', [RedirectController::class, 'redirect'])
+    ->where('code', '[a-zA-Z0-9]{3,10}')
+    ->name('redirect');

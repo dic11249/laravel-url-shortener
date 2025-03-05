@@ -26,8 +26,7 @@ const form = useForm({
         <form
             @submit.prevent="form.post(route('urls.store'), {
                 onSuccess: () => {
-                    form.reset(), // 使用 Inertia 提供的 reset() 方法清空表單
-                    router.get(route('dashboard')); // 重新載入網址列表
+                    form.reset() // 使用 Inertia 提供的 reset() 方法清空表單
                 }
             })"
             class="mt-6 space-y-6"
@@ -55,7 +54,6 @@ const form = useForm({
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.code"
-                    required
                     autocomplete="code"
                 />
 

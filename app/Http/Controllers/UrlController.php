@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UrlResource;
-use App\Models\Url;
-use App\Services\UrlService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Url;
 use Inertia\Inertia;
+use App\Services\UrlService;
+use Illuminate\Http\Request;
+use App\Http\Resources\UrlResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class UrlController extends Controller
 {
-    public $urlService;
+
+    private $urlService;
 
     public function __construct(UrlService $urlService)
     {
@@ -39,17 +41,20 @@ class UrlController extends Controller
 
     public function store(Request $request)
     {
+        $userId = Auth::check() ? Auth::id() : null;
+
         $request->validate([
             'originalUrl' => 'required|url',
             'code' => 'nullable|alpha_num|min:3|max:10',
         ]);
-        
-        Url::create([
-            'user_id' => Auth::user()->id,
-            'code' => $request->code,
-            'original_url' => $request->originalUrl,
-            'expires_at' => Carbon::today(),
-            'is_custom' => !empty($request->code),
-        ]);
+
+        $this->urlService->create(
+            $request->originalUrl,
+            $userId,
+            $request->code,
+            $request->expiresAt ?? Carbon::today()->addDays(7)
+        );
+
+        return Redirect::route('dashboard');
     }
 }
