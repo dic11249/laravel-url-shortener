@@ -31,13 +31,28 @@ class Url extends Model
         return $this->belongsTo(User::class);
     }
 
-    // public function visits()
-    // {
-    //     return $this->hasMany(UrlVisit::class);
-    // }
+    /**
+     * 取得短網址的所有訪問記錄
+     */
+    public function visits()
+    {
+        return $this->hasMany(UrlVisit::class);
+    }
 
     // public function stats()
     // {
     //     return $this->hasMany(UrlStat::class);
     // }
+
+    /**
+     * 作用域：只查詢有效的 URL
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true)
+            ->where(function ($query) {
+                $query->whereNull('expires_at')
+                    ->orWhere('expires_at', '>', now());
+            });
+    }
 }
